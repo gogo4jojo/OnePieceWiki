@@ -1,0 +1,176 @@
+CREATE TABLE op.devil_fruit (
+	df_name VARCHAR(50) NOT NULL,
+	type VARCHAR(30) NOT NULL, --Paramecia, Logia, Ancient Zoan, Artificial Zoan, Mythical Zoan
+	awakened BOOLEAN NOT NULL, --false, true
+	PRIMARY KEY (df_name),
+	CHECK (df_name <> ''),
+	CHECK (type <> '')
+);
+
+CREATE TABLE op.sword (
+    sword_name VARCHAR(50) NOT NULL,
+	type VARCHAR(30) NOT NULL, --katana, naginata, etc.
+	classification VARCHAR(30), --Meito, Yotu, Kokuto
+	grade VARCHAR(30) NOT NULL, --Skillful, Great, Supreme
+	PRIMARY KEY (sword_name),
+	CHECK (sword_name <> ''),
+	CHECK (type <> ''), 
+	CHECK (classification <> ''),
+	CHECK (grade <> '')
+);
+
+CREATE TABLE op.Island (
+	island_name VARCHAR(50) NOT NULL,
+	region VARCHAR(30) NOT NULL, --East Blue, West Blue, North Blue, South Blue, Paradise, New World, Grand Line, Under the Sea, The Sky, Calm Belt, Red Line
+	affiliation CHAR(3) NOT NULL,
+    ruler INTEGER,
+    territory VARCHAR(50),
+	PRIMARY KEY (island_name),
+	CHECK (island_name <> ''),
+	CHECK (region <> ''),
+	CHECK (affiliation IN ('IND', 'WLG', 'YNK'))
+);
+
+CREATE TABLE op.Vessel (
+	vessel_id SERIAL NOT NULL,
+	vessel_name VARCHAR(50) NOT NULL,
+	size INTEGER NOT NULL,
+    shipwright INTEGER,
+	owners VARCHAR(50),
+	PRIMARY KEY (vessel_id),
+	CHECK (vessel_name <> ''),
+	CHECK (size > 0)
+);
+
+CREATE TABLE op.Person (
+    id SERIAL PRIMARY KEY,  
+    fname VARCHAR(50) NOT NULL,
+    mname VARCHAR(50),
+    lname VARCHAR(50), 
+    age INTEGER,
+    gender CHAR(1),
+    race VARCHAR(30),
+    hometown VARCHAR(50),
+    birthday DATE,
+    height INT,
+    status CHAR(1) NOT NULL,
+    job VARCHAR(30),
+    last_seen VARCHAR(50),
+    description TEXT, 
+    image BYTEA, 
+    FOREIGN KEY (hometown) REFERENCES op.Island(island_name)
+        ON DELETE SET NULL ON UPDATE CASCADE,
+    FOREIGN KEY (last_seen) REFERENCES op.Island(island_name)
+        ON DELETE SET NULL ON UPDATE CASCADE,
+    CHECK (id > 0),
+    CHECK (fname <> ''),
+    CHECK (race <> ''),
+    CHECK (age >= 0),
+    CHECK (height > 0),
+    CHECK (status IN ('A', 'D', '?')),
+    CHECK (gender IN ('M', 'F', '?'))
+);
+
+CREATE TABLE op.groups(
+    group_name VARCHAR(50) NOT NULL,
+	base VARCHAR(50),
+	ship VARCHAR(50),
+	leader_id INTEGER,
+	PRIMARY KEY (group_name),
+	FOREIGN KEY (base) REFERENCES op.Island(island_name)
+		ON DELETE SET NULL ON UPDATE CASCADE,
+	FOREIGN KEY (leader_id) REFERENCES op.Person(id)
+		ON DELETE SET NULL ON UPDATE CASCADE,
+	FOREIGN KEY (ship) REFERENCES op.Vessel(vessel_name)
+		ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+ALTER TABLE op.Island
+ADD CONSTRAINT fk_ruler
+FOREIGN KEY (ruler) REFERENCES op.Person(id)
+    ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE op.Island
+ADD CONSTRAINT fk_territory
+FOREIGN KEY (territory) REFERENCES op.Groups(group_name)
+    ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE op.Vessel
+ADD CONSTRAINT fk_shipwright
+FOREIGN KEY (shipwright) REFERENCES op.Person(id)
+    ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE op.Vessel
+ADD CONSTRAINT fk_owners
+FOREIGN KEY (owners) REFERENCES op.groups(group_name)
+    ON DELETE SET NULL ON UPDATE CASCADE;
+
+CREATE TABLE op.devil_fruit_eater (
+	df_name VARCHAR(50) NOT NULL,
+	eater INTEGER NOT NULL,
+	PRIMARY KEY (df_name, eater),
+    FOREIGN KEY (df_name) REFERENCES op.devil_fruit(df_name)
+        ON DELETE CASCADE ON UPDATE CASCADE, 
+	FOREIGN KEY (eater) REFERENCES op.Person(id)
+		ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE op.Pirate (
+	id INTEGER,
+	role VARCHAR(30),
+	bounty BIGINT,
+    poster BYTEA,
+	active BOOLEAN NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (id) REFERENCES op.person(id)
+		ON DELETE CASCADE ON UPDATE CASCADE,
+	CHECK (bounty >= 0),
+	CHECK (role <> '')
+);
+
+CREATE TABLE op.Marine (
+	id INTEGER,
+	rank VARCHAR(30),
+	bounty BIGINT,
+	active BOOLEAN NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (id) REFERENCES op.person(id)
+		ON DELETE CASCADE ON UPDATE CASCADE,
+	CHECK (bounty >= 0),
+	CHECK (rank <> '')
+);
+
+CREATE TABLE op.person_in_group (
+    id INTEGER,
+    group_name VARCHAR(50),
+    PRIMARY KEY(id, group_name),
+    FOREIGN KEY (id) REFERENCES op.person(id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (group_name) REFERENCES op.groups(group_name)
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE op.swordsman (
+    swordsman INTEGER,
+    sword VARCHAR(50),
+    PRIMARY KEY(swordsman, sword),
+    FOREIGN KEY (swordsman) REFERENCES op.person(id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (sword) REFERENCES op.sword(sword_name)
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE op.artifact (
+    artifact_id SERIAL NOT NULL, 
+    object VARCHAR(50) NOT NULL,
+    location VARCHAR(30),
+    owner INTEGER,
+    description TEXT,
+    PRIMARY KEY (artifact_id),
+    FOREIGN KEY (owner) REFERENCES op.Person(id)
+        ON DELETE SET NULL ON UPDATE CASCADE,
+    FOREIGN KEY (location) REFERENCES op.Island(island_name)
+        ON DELETE SET NULL ON UPDATE CASCADE,
+    CHECK (artifact_id > 0),
+	CHECK (object <> '')
+);

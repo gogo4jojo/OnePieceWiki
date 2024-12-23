@@ -1,0 +1,14 @@
+1. first, make sure that the password for the db isn't hardcoded in conn.py, make sure we follow security:
+    check criteria below (canvas)
+2. make our user manual and team report, delete any temp / unnecessary files. fixing up comments and any dev stuff that is not needed anymore.
+3. make sure all the functionality we added work and don't crash, (lots of testing for this).
+4. rest of criteria (we are pretty good here, minus the security and full testing):
+    - User Manual & Final Team Report are Reasonable & Code Posted on GitHub
+    - 8 tables
+    - 10 Queries with Transactions, Sorting etc.
+    -Functioning Front End
+        Doesn't crash or throw errors etc.
+    - Security Best Practices
+        No SQL Injection
+        No hardcoded database password in code
+        Hash Passwords

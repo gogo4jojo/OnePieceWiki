@@ -1,0 +1,73 @@
+pirate_positions = [
+    "Captain",
+    "First Mate",
+    "Swordsman",
+    "Navigator",
+    "Sniper/Gunner/Cannoneer",
+    "Cook",
+    "Doctor",
+    "Archaeologist",
+    "Shipwright",
+    "Musician",
+    "Helmsman"
+]
+
+marine_ranks = [
+    "Fleet Admiral",
+    "Admiral",
+    "Vice Admiral",
+    "Rear Admiral",
+    "Commodore",
+    "Captain",
+    "Commander",
+    "Lieutenant Commander",
+    "Lieutenant",
+    "Lieutenant Junior Grade",
+    "Ensign",
+    "Warrant Officer",
+    "Master Chief Petty Officer",
+    "Chief Petty Officer",
+    "Petty Officer",
+    "Seaman First Class",
+    "Seaman Apprentice",
+    "Seaman Recruit",
+    "Chore Boy"
+]
+
+swords = [
+    'cutlass', 
+    'dao', 
+    'jian', 
+    'katana', 
+    'kogatana', 
+    'kukri', 
+    'longsword', 
+    'machete', 
+    'naginata', 
+    'nandao', 
+    'nodachi', 
+    'rapier', 
+    'saber', 
+    'shikomizue', 
+    'shinai', 
+    'shirasaya', 
+    'shotel', 
+    'tanto', 
+    'urumi', 
+    'wakizashi', 
+    'zanbato'
+]
+
+regions = [
+    'Calm Belt', 
+    'East Blue', 
+    'Grand Line', 
+    'New World', 
+    'North Blue', 
+    'Paradise', 
+    'Red Line', 
+    'Sky', 
+    'South Blue', 
+    'Under the Sea', 
+    'West Blue'
+]
